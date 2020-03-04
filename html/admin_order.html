@@ -1,0 +1,153 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js">
+</script>
+<script src="https://unpkg.com/axios/dist/axios.min.js">
+</script>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/it.js" integrity="sha256-D8y560ZGsKY1LoAajKkQCG7y0Vkye361MH4yFv2K5kk=" crossorigin="anonymous">
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css" integrity="sha256-FAOaXTpl90/K8cXmSdsskbQN3nKYulhCpPbcFzGTWKI=" crossorigin="anonymous" />
+<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-message-box@3.2.1/dist/messagebox.min.js">
+</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-message-box@3.2.1/dist/messagebox.min.css">
+<script>
+	window.alert=function(value){
+		return $.MessageBox({
+			buttonDone: "OK",
+			message  : value
+		});
+	}
+	var message="{{message}}"
+	if(message!=""){
+		alert(message);
+	}
+	var oid={{oid}};
+</script>
+<style>
+	.entry-footer{
+		display:none;
+	}
+	.line{
+		background:#CCC;
+		width:100%;
+		height:1px;
+		margin:10px 0 10px 0;
+	}
+	.title_interno{
+		background:#CBCBCB;
+		width:100%;
+		border-radius:30px 30px 0 0;
+		height:45px;
+		padding:15px;
+		border:1px solid black;
+	}
+	.cart_interno{
+		padding:30px;
+		margin-top:10px;
+		width:100%;
+		border:1px solid black;
+		border-radius:0 0 30px 30px;
+		-webkit-box-shadow: 5px 5px 10px 0px #000000;
+		-moz-box-shadow: 5px 5px 10px 0px #000000;
+		-o-box-shadow: 5px 5px 10px 0px #000000;
+		box-shadow: 5px 5px 10px 0px #000000;
+		background:white;
+	}
+	.reinvia:active, .reinvia:hover, .reinvia:visited{
+		background:#013f28 !important;
+	}
+	
+	.reinvia{
+		background:#19B359;
+	}
+
+</style>
+<div id="loader">
+	<div class="text-center">
+	  <div class="spinner-border" role="status">
+		<span class="sr-only">Loading...</span>
+	  </div>
+  </div>
+</div>
+<div id="app" style="display:none">
+	<div id="mybody" >
+		<div style="width:100%;padding:15px;float:left;">
+			<div>
+				<div style="padding:30px">
+
+					<div class="title_interno">
+						<b>DETTAGLIO <span v-if="status!=''">{{(status=="SISAL" || status=="SISAL-PAID" || status=="SISAL-REPRINTED" ||  status=="SISAL-EXPIRED" ?" ORDINE N "+fatture[0].id+(status=="SISAL-EXPIRED" ?" SCADUTA ":(status=="SISAL"?" - PAGAMENTO SISALPAY ENTRO "+italianFormatOre(fatture[0].items[0].ts_expire):"")):" ORDINE N "+fatture[0].id+" - CARTA DI CREDITO")}}</span>
+						</b>
+					</span>
+				</div>
+				<div class="cart_interno">
+					<span v-if="status=='PRINTED'" v-html="ordersInternal(fatture[0].id,fatture[0].doc_path)" >
+					</span>
+					<div style="margin-bottom:10px;margin-top:15px;">
+					</div>
+					<div  v-for="(fattura, index) in fatture" :key="index">
+						<div :id="index2" v-for="(i, index2) in fattura.items" :key="index2" >
+							<div>
+								<div class="row_tick">
+									<div style="width:65%;float:left">
+										<span style="font-size:22px">{{i.titolo}}</span>
+										<BR>
+										<div style="width:50%;float:left">{{formatSeat(i.posto_esteso,i.settore)}}</div>
+										<div style="width:65%;float:left">{{i.event_id.startsWith('A')?'&nbsp;':italianFormatOre(i.ts_inizio)}}</div>
+										<div style="width:15%;float:left">{{prezzoTitolo(i)}}</div>
+										<div style="clar:both">
+										</div>
+										<div style="width:65%;float:left">
+											<b style="font-size:15px;">{{i.location}}</b><BR>
+											<b style="font-size:15px;">{{i.nome}} {{i.cognome}}</b>
+										</div>
+										<div style="clar:both">
+										</div>
+									</div>
+									<div style="width:35%;float:left">
+										<button id="button_reinvia" v-if="(i.status=='SISAL-PAID' || i.status=='SISAL-REPRINTED') || i.status=='PRINTED'" class="reinvia" style="margin-right:15px;float:left;width:100px;height:34px;font-size:14px;padding:10px;text-align:center;border-radius:10px;" @click="inviaPdf(index2+1,i.oid,i)"><i   class="fa fa-envelope" aria-hidden="true"></i> Reinvia</button>
+										
+										<span v-if="i.status=='PAYMENT' || i.status=='UNPAID' ||  i.status=='REFUNDED' ||  i.status=='NOTREFUNDED'">
+											<BR>Pagamento non andato a buon fine</span>
+										<span v-if="i.status=='SISAL-EXPIRED'">
+											<BR>La prenotazione è scaduta</span>
+											<div style="float:left"  v-if="i.status=='SISAL'">
+											<CENTER >
+												<img :src="'{{home_url}}/barcode/'+i.pnr+'.png'" />
+												<BR>{{i.pnr}}</CENTER></div>
+											
+												
+											</div>
+											<BR>
+											<span style="display:none" id="reinvio_message_conf"><CENTER>vuoi ricevere il titolo sulla tua mail<BR><button style="height:15px;margin-right:15px;line-height:1;"  @click="inviaPdf(index2+1,i.oid,i)" >SI</button><button  style="height:15px;line-height:1">NO</button></CENTER></span>
+											<span style="display:none;font-size:16px;" id="reinvio_message">il tuo titolo è stato reinviato sulla tua mail</span>
+											<div style="clear:both">
+											</div>
+											<div class="line">
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<div style="clear:both">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="{{default_url}}assets/js/vue-component-profile.js?ver={{random}}">
+</script>

@@ -1,0 +1,78 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+			<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+			<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+			<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+			<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/it.js" integrity="sha256-D8y560ZGsKY1LoAajKkQCG7y0Vkye361MH4yFv2K5kk=" crossorigin="anonymous"></script>
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css" integrity="sha256-FAOaXTpl90/K8cXmSdsskbQN3nKYulhCpPbcFzGTWKI=" crossorigin="anonymous" />
+			<style>
+				footer{
+					display:none;
+				}
+				.line{
+					background:#CCC;
+					width:100%;
+					height:1px;
+					margin:10px 0 10px 0;
+				}
+				.title_interno{
+					background:#CBCBCB;
+					width:100%;
+					border-radius:30px 30px 0 0;
+					height:45px;
+					padding:15px;
+					border:1px solid black;
+				}
+				.cart_interno{
+					padding:30px;
+					margin-top:10px;
+					width:100%;
+					border:1px solid black;
+					border-radius:0 0 30px 30px;
+					-webkit-box-shadow: 5px 5px 10px 0px #000000;
+					-moz-box-shadow: 5px 5px 10px 0px #000000;
+					-o-box-shadow: 5px 5px 10px 0px #000000;
+					box-shadow: 5px 5px 10px 0px #000000;
+					background:white;
+				}
+			</style>
+			<div id="loader">
+			<div class="text-center">
+			  <div class="spinner-border" role="status">
+				<span class="sr-only">Loading...</span>
+			  </div>
+		  </div>
+		</div>
+			<div id="app" style="display:none">
+			<div id="mybody" >
+			
+			<div style="width:100%;padding:15px;float:left;">
+			<div>
+			<div style="padding:30px">
+			<div class="title_interno"><b>I MIEI ORDINI</b></div>
+			<div class="cart_interno">
+			<div style="margin-bottom:10px;" v-if="fatture.length==0">NON HAI ANCORA EFFETTUATO NESSUNA PRENOTAZIONE O ORDINE</div>
+			<div style="margin-bottom:10px;" v-if="fatture.length!=0">
+			<div style="width:23%;float:left;text-align:center;">PAGAMENTO</div><div style="width:26%;float:left;text-align:center;">DATA</div><div style="width:18%;float:left;text-align:center;">NUMERO ORDINE</div><div style="width:18%;float:left;text-align:center;">PREZZO</div><div style="width:15%;float:left;text-align:center;">STATO</div><div style="clear:both"></div>
+			</div>
+			<div  v-for="(i, index) in fatture" >
+			<div>
+			<div @click="goToItems(i.id)" title="fai click per selezionare" style="cursor:pointer">
+			<div style="width:23%;float:left;padding:5px;;text-align:center;"><img style="width:100%;max-width:80px" style="margin:5px;" :src="imageNexi(i.item)" /></div><div style="width:26%;float:left;text-align:center;">{{italianFormatOre(i.ts_create)}}</div><div style="width:18%;float:left;text-align:center;">{{i.item.oid}}</div><div style="width:18%;float:left;text-align:center;">€ {{i.totale.replace(".",",")}}</div><div style="width:15%;float:left;text-align:center;" v-html="formatPagato(i.item)"></div><div style="clear:both">
+			</div>
+			<div class="line"></div>
+			</div>
+			</div>
+			</div>
+			</div>
+			</div>
+			</div>
+			
+			</div>
+			</div>
+		</div>
+<script src="{{default_url}}assets/js/vue-component-order.js?ver={{random}}">
+</script>
+			

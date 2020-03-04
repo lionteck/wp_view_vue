@@ -1,0 +1,27 @@
+<p>Email: {{user_email}}</p><p>Nome: {{user_firstname}}</p><p>Cognome: {{user_lastname}}</p><p>telefono: {{$phone}}</p>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+<div id="app">
+<div class="accordion" id="accordionExample">
+  <div class="card" v-for="(fattura, index) in fatture" >
+	<div class="card-header" id="headingOne" v-if="index!='dati_evento'" >
+		<button class="btn btn-link" type="button" data-toggle="collapse" :data-target="'#collapse'+index" aria-expanded="true" aria-controls="collapseOne">
+		  Ordine n.{{fattura.id}}
+		</button>
+		
+	</div>
+
+	<div :id="'collapse'+index" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample"  >
+	<span v-html="ordersInternal(fattura.id,fattura.doc_path)"></span>
+	<div :id="index2" v-for="(i, index2) in fattura.items"   >
+		{{i.id}} {{i.posto_esteso}} {{i.pnr}}<button v-if="i.barcode!=null && i.status=='SISAL'" @click="reprintSisal(i.barcode,i.oid)">ristampa</button><button v-if="i.status!='SISAL'" @click="cancelTicket(i.barcode,i.oid)">annulla</button>
+	</div>
+	</div>
+</div>
+</div>
+</div>
+<script src="{{default_url}}'assets/js/vue-component-profile.js?ver={{random}}"></script>
